@@ -6,419 +6,465 @@
 <title>水球战术板 — 世界泳联女子标准场地</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#06101a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh}
-/* ── TABS ── */
-.tab-bar{display:flex;background:#050e18;border-bottom:1px solid #1c3044;position:sticky;top:0;z-index:100}
-.tab{flex:1;padding:10px 4px;text-align:center;font-size:13px;color:#5a7888;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
-.tab.on{color:#00b8d4;border-bottom-color:#00b8d4}
+body{background:#020d1a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;min-height:100vh;padding:10px}
+.tab-bar{display:flex;background:#020d1a;border-bottom:1px solid rgba(0,160,255,0.15);position:sticky;top:0;z-index:100}
+.tab{flex:1;padding:10px 4px;text-align:center;font-size:13px;color:rgba(80,140,180,0.6);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;letter-spacing:.5px}
+.tab.on{color:rgba(0,210,255,0.9);border-bottom-color:rgba(0,200,255,0.7)}
 .panel{display:none;padding:10px}
 .panel.on{display:block}
-/* ── BOARD ── */
-.bar{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
-.btn{background:#0b1c2c;border:0.5px solid #1c3044;color:#b0cede;border-radius:7px;padding:6px 11px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;touch-action:manipulation}
-.btn:active{opacity:.75}
-.btn.on{background:#00b8d4;color:#021618;border-color:#00b8d4}
-.sep{width:0.5px;height:16px;background:#1c3044;margin:0 2px}
-.stage-wrap{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
-svg.board{display:block;touch-action:none;user-select:none;max-width:100%}
-.anim{display:flex;gap:6px;align-items:center;margin-top:7px;padding:7px 10px;background:#091622;border-radius:8px;flex-wrap:wrap}
-.anim input[type=range]{flex:1;min-width:60px;accent-color:#00b8d4}
-.plist{display:flex;flex-direction:column;gap:3px;margin-top:5px}
-.prow{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:7px;cursor:pointer;font-size:12px;color:#b0cede;touch-action:manipulation}
-.prow:active{background:#112436}
-.prow.on{background:#112436;border:0.5px solid #00b8d4}
+.shell{background:linear-gradient(160deg,#020d1a 0%,#03111f 60%,#050a18 100%);border-radius:18px;padding:12px;border:1px solid rgba(0,180,255,0.12);position:relative;overflow:hidden}
+.shell::before{content:'';position:absolute;inset:0;pointer-events:none;border-radius:18px;background-image:linear-gradient(rgba(0,160,255,0.035) 1px,transparent 1px),linear-gradient(90deg,rgba(0,160,255,0.035) 1px,transparent 1px);background-size:28px 28px}
+.topbar{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:10px;position:relative;z-index:10}
+.brand{font-size:10px;font-weight:600;color:rgba(0,210,255,0.7);letter-spacing:3px;text-transform:uppercase;margin-right:8px}
+.btn{background:rgba(0,160,255,0.07);border:1px solid rgba(0,160,255,0.18);color:rgba(160,220,255,0.8);border-radius:7px;padding:6px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:all .15s;touch-action:manipulation}
+.btn:hover,.btn:active{background:rgba(0,180,255,0.14);border-color:rgba(0,200,255,0.4);color:#fff}
+.btn.on{background:rgba(0,200,255,0.18);border-color:rgba(0,220,255,0.55);color:rgba(0,230,255,0.95);box-shadow:0 0 12px rgba(0,200,255,0.15)}
+.btn.danger{border-color:rgba(255,60,80,0.25);color:rgba(255,140,160,0.8)}
+.btn.danger:hover{background:rgba(255,40,60,0.12);border-color:rgba(255,60,80,0.5)}
+.sep{width:1px;height:16px;background:rgba(0,160,255,0.2);margin:0 2px}
+.stage-wrap{border-radius:10px;overflow:hidden;border:1px solid rgba(0,160,255,0.14);position:relative}
+.stage-wrap::after{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,180,255,0.05) 0%,transparent 25%,transparent 75%,rgba(0,80,160,0.06) 100%)}
+svg.board{display:block;touch-action:none;user-select:none;width:100%;height:auto}
+.leg{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:rgba(80,140,180,0.65);margin-top:6px;padding:4px 0}
+.leg span{display:inline-flex;align-items:center;gap:4px}
+.bottom-row{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.gpanel{background:rgba(4,14,28,0.82);border:1px solid rgba(0,160,255,0.12);border-radius:10px;padding:10px 12px;flex:1;min-width:180px}
+.ptitle{font-size:9px;color:rgba(0,180,255,0.5);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:8px}
+.arow{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.arow input[type=range]{flex:1;min-width:50px;accent-color:rgba(0,200,255,0.8)}
+.slbl{font-size:10px;color:rgba(0,180,255,0.45);white-space:nowrap}
+.plist{display:flex;flex-direction:column;gap:3px;margin-top:6px}
+.prow2{display:flex;align-items:center;gap:5px;padding:5px 8px;border-radius:7px;cursor:pointer;font-size:12px;color:rgba(140,200,240,0.75);border:1px solid transparent;transition:all .14s;touch-action:manipulation}
+.prow2:hover,.prow2:active{background:rgba(0,160,255,0.08);border-color:rgba(0,160,255,0.15)}
+.prow2.on{background:rgba(0,160,255,0.12);border-color:rgba(0,200,255,0.3);color:rgba(0,220,255,0.9)}
 .pname{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.leg{display:flex;gap:8px;flex-wrap:wrap;font-size:11px;color:#4a6878;margin-top:6px;padding:4px 0}
-.leg span{display:inline-flex;align-items:center;gap:3px}
-.dot{width:9px;height:9px;border-radius:50%;display:inline-block}
-/* ── GUIDE ── */
-.guide{max-width:600px;margin:0 auto;padding:12px}
-.guide h2{color:#00b8d4;font-size:15px;margin:18px 0 8px;display:flex;align-items:center;gap:6px}
-.guide h2:first-child{margin-top:0}
-.guide h3{color:#8ac8d8;font-size:13px;margin:12px 0 6px}
-.guide p{color:#8aaabb;font-size:13px;line-height:1.7;margin-bottom:6px}
-.guide ul{color:#8aaabb;font-size:13px;line-height:1.8;padding-left:18px;margin-bottom:8px}
-.guide li{margin-bottom:2px}
-.card{background:#0c1e2e;border:0.5px solid #1c3444;border-radius:10px;padding:12px;margin-bottom:10px}
-.tag{display:inline-block;background:#0d2a1a;color:#2ea040;border:0.5px solid #2ea040;border-radius:4px;font-size:11px;padding:1px 7px;margin-right:4px;margin-bottom:4px}
-.tag.red{background:#2a0d10;color:#d42028;border-color:#d42028}
-.tag.blue{background:#0d1a2a;color:#00b8d4;border-color:#00b8d4}
-.tag.orange{background:#2a1608;color:#ff8c40;border-color:#ff8c40}
-.tip{background:#0d1e10;border-left:3px solid #2ea040;padding:8px 10px;border-radius:0 6px 6px 0;margin:8px 0;color:#6ab880;font-size:12px;line-height:1.6}
+.avpanel{background:rgba(4,14,28,0.82);border:1px solid rgba(0,160,255,0.12);border-radius:10px;padding:10px 12px;margin-top:8px}
+.avgrid{display:flex;flex-wrap:wrap;gap:6px}
+.avslot{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer}
+.aving{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;overflow:hidden;position:relative;border:1.5px solid rgba(0,160,255,0.2);transition:all .15s}
+.aving:hover{border-color:rgba(0,220,255,0.55);box-shadow:0 0 10px rgba(0,180,255,0.2)}
+.aving img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.avlbl{font-size:9px;color:rgba(60,120,160,0.7);letter-spacing:1px}
+.avdel{position:absolute;top:-2px;right:-2px;width:14px;height:14px;background:rgba(200,20,40,0.88);border-radius:50%;color:#fff;font-size:8px;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:10}
+.avslot:hover .avdel{display:flex}
+.avteam{font-size:9px;color:rgba(0,160,255,0.4);letter-spacing:2px;text-transform:uppercase;margin:6px 0 4px}
+.modal-wrap{display:none;position:fixed;inset:0;background:rgba(2,8,20,0.9);z-index:9999;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+.modal-wrap.show{display:flex}
+.modal-box{background:rgba(4,16,36,0.98);border:1px solid rgba(0,180,255,0.22);border-radius:14px;padding:18px;width:270px;max-width:90vw}
+.modal-ttl{font-size:10px;color:rgba(0,210,255,0.75);letter-spacing:2px;text-transform:uppercase;margin-bottom:14px}
+.uparea{border:1.5px dashed rgba(0,160,255,0.28);border-radius:8px;padding:16px;text-align:center;cursor:pointer;color:rgba(80,150,200,0.7);font-size:12px;background:rgba(0,30,60,0.35);transition:all .18s;margin-bottom:12px}
+.uparea:hover{border-color:rgba(0,220,255,0.55);color:rgba(180,230,255,0.9)}
+.prev-img{width:80px;height:80px;border-radius:50%;object-fit:cover;margin:0 auto 10px;display:block;border:2px solid rgba(0,200,255,0.5)}
+.mbrow{display:flex;gap:8px}
+#fsOverlay{display:none;position:fixed;inset:0;z-index:8888;background:#020d1a;flex-direction:column;padding:10px}
+#fsOverlay.show{display:flex}
+#fsOverlay .topbar{margin-bottom:8px;flex-shrink:0}
+#fsOverlay .stage-wrap{flex:1;display:flex;align-items:stretch;min-height:0}
+#fsOverlay .stage-wrap svg{flex:1;width:100%;height:100%;max-height:100%}
+#fsOverlay::before{content:'';position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(0,160,255,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,160,255,0.03) 1px,transparent 1px);background-size:28px 28px}
+.guide{max-width:600px;margin:0 auto}
+.guide h2{color:rgba(0,200,255,0.8);font-size:15px;margin:18px 0 8px;font-weight:500}
+.guide h2:first-child{margin-top:4px}
+.guide h3{color:rgba(100,180,220,0.8);font-size:13px;margin:12px 0 6px;font-weight:500}
+.guide p{color:rgba(120,170,200,0.8);font-size:13px;line-height:1.7;margin-bottom:6px}
+.guide ul{color:rgba(120,170,200,0.8);font-size:13px;line-height:1.8;padding-left:18px;margin-bottom:8px}
+.gcard{background:rgba(4,14,28,0.82);border:1px solid rgba(0,160,255,0.12);border-radius:10px;padding:12px;margin-bottom:10px}
 .step{display:flex;gap:10px;margin-bottom:8px;align-items:flex-start}
-.step-num{background:#00b8d4;color:#021618;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;margin-top:1px}
-.step-txt{color:#8aaabb;font-size:13px;line-height:1.6}
-.step-txt strong{color:#b0cede}
-.divider{height:0.5px;background:#1c3044;margin:14px 0}
-.badge{display:inline-flex;align-items:center;gap:4px;background:#0c1e2e;border:0.5px solid #1c3444;border-radius:6px;padding:3px 8px;font-size:11px;color:#8aaabb;margin:2px}
+.snum{background:rgba(0,180,255,0.2);border:1px solid rgba(0,200,255,0.3);color:rgba(0,220,255,0.9);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;flex-shrink:0;margin-top:1px}
+.stxt{color:rgba(120,170,200,0.8);font-size:13px;line-height:1.6}
+.stxt strong{color:rgba(180,220,255,0.9)}
+.tip{background:rgba(0,80,30,0.25);border-left:3px solid rgba(0,200,100,0.5);padding:8px 10px;border-radius:0 6px 6px 0;margin:8px 0;color:rgba(80,200,130,0.8);font-size:12px;line-height:1.6}
+.gdiv{height:1px;background:rgba(0,160,255,0.1);margin:14px 0}
+.badge{display:inline-flex;align-items:center;gap:4px;background:rgba(0,40,80,0.5);border:1px solid rgba(0,160,255,0.2);border-radius:6px;padding:3px 8px;font-size:11px;color:rgba(100,180,220,0.8);margin:2px}
 </style>
 </head>
 <body>
-
-<!-- TAB BAR -->
 <div class="tab-bar">
   <div class="tab on" id="tab-board" onclick="switchTab('board')">⚽ 战术板</div>
   <div class="tab" id="tab-guide" onclick="switchTab('guide')">📖 使用说明</div>
 </div>
 
-<!-- ══════════════ BOARD PANEL ══════════════ -->
-<div class="panel on" id="panel-board" style="padding:10px">
-
-<div class="bar">
+<div class="panel on" id="panel-board">
+<div class="shell">
+<div class="topbar">
+  <span class="brand">⬡ tactics</span>
   <button class="btn on" id="bSel" onclick="M('sel')">▶ 移动</button>
   <button class="btn" id="bRun" onclick="M('run')">→ 跑位</button>
   <button class="btn" id="bPas" onclick="M('pas')">⤳ 传球</button>
   <div class="sep"></div>
   <button class="btn" onclick="Undo()">↩ 撤销</button>
-  <button class="btn" onclick="ClrArr()">✕ 清空箭头</button>
+  <button class="btn danger" onclick="ClrArr()">✕ 清空</button>
   <button class="btn" onclick="Reset()">↺ 复位</button>
   <div class="sep"></div>
-  <button class="btn" id="bLn" onclick="TglLines()">≡ 隐藏标线</button>
+  <button class="btn" id="bLn" onclick="TglLines()">⊞ 标线</button>
+  <div class="sep"></div>
+  <button class="btn" onclick="openFS()">⛶ 全屏</button>
 </div>
-
-<div class="stage-wrap">
-<svg id="sv" class="board" viewBox="0 0 820 600" width="820" height="600">
+<div class="stage-wrap" id="stageMain">
+<svg id="sv" class="board" viewBox="0 0 820 600">
 <defs>
-  <marker id="aR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="#00b8d4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <marker id="aR" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M1 1L9 5L1 9" fill="none" stroke="#00ddff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   </marker>
-  <marker id="aP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-    <path d="M2 1L8 5L2 9" fill="none" stroke="#ff8c40" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+  <marker id="aP" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+    <path d="M1 1L9 5L1 9" fill="none" stroke="#ff4488" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
   </marker>
+  <radialGradient id="wtr" cx="50%" cy="40%" r="70%"><stop offset="0%" stop-color="#0d3a6a"/><stop offset="100%" stop-color="#041428"/></radialGradient>
+  <radialGradient id="pB" cx="38%" cy="28%" r="72%"><stop offset="0%" stop-color="#2ea0ff"/><stop offset="100%" stop-color="#0a3a90"/></radialGradient>
+  <radialGradient id="pW" cx="38%" cy="28%" r="72%"><stop offset="0%" stop-color="#e8f4ff"/><stop offset="100%" stop-color="#7ab0d8"/></radialGradient>
+  <radialGradient id="pG" cx="38%" cy="28%" r="72%"><stop offset="0%" stop-color="#ff5070"/><stop offset="100%" stop-color="#880020"/></radialGradient>
+  <radialGradient id="blg" cx="35%" cy="30%" r="70%"><stop offset="0%" stop-color="#fffbc0"/><stop offset="55%" stop-color="#ffcc00"/><stop offset="100%" stop-color="#cc8800"/></radialGradient>
+  <linearGradient id="glHL" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="rgba(255,255,255,0.07)"/><stop offset="100%" stop-color="rgba(0,0,0,0)"/></linearGradient>
+  <linearGradient id="zL" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#ff2255" stop-opacity="0.18"/><stop offset="100%" stop-color="#ff2255" stop-opacity="0.02"/></linearGradient>
+  <linearGradient id="zR" x1="1" y1="0" x2="0" y2="0"><stop offset="0%" stop-color="#ff2255" stop-opacity="0.18"/><stop offset="100%" stop-color="#ff2255" stop-opacity="0.02"/></linearGradient>
+  <linearGradient id="yZ" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffdd00" stop-opacity="0.20"/><stop offset="100%" stop-color="#ffaa00" stop-opacity="0.08"/></linearGradient>
+  <pattern id="pgrid" x="0" y="0" width="20.8" height="20.8" patternUnits="userSpaceOnUse" patternTransform="translate(150,62)"><path d="M20.8 0L0 0 0 20.8" fill="none" stroke="rgba(0,140,220,0.06)" stroke-width="0.5"/></pattern>
 </defs>
-<rect width="820" height="600" fill="#06101a"/>
+<rect width="820" height="600" fill="#020d1a"/>
 <g id="gF"></g><g id="gA"></g><g id="gP"></g>
 </svg>
 </div>
-
 <div class="leg">
-  <span><span class="dot" style="background:#1a6dc8"></span>蓝队 1-7号</span>
-  <span><span class="dot" style="background:#d4e8f4;border:1px solid #555"></span>白队 1-7号</span>
-  <span><span class="dot" style="background:#c82030"></span>守门员红1号</span>
-  <span><span style="display:inline-block;width:16px;height:2px;background:#00b8d4;vertical-align:middle"></span>跑位</span>
-  <span><span style="display:inline-block;width:16px;height:2px;border-top:2px dashed #ff8c40;vertical-align:middle"></span>传球</span>
+  <span><span style="width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#2ea0ff,#0a3a90);border:1px solid rgba(0,140,255,0.4);display:inline-block"></span>蓝队 1–7</span>
+  <span><span style="width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#e8f4ff,#7ab0d8);border:1px solid rgba(180,220,255,0.4);display:inline-block"></span>白队 1–7</span>
+  <span><span style="width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#ff5070,#880020);display:inline-block"></span>守门员</span>
+  <span><span style="display:inline-block;width:18px;height:2px;background:rgba(0,220,255,0.8);border-radius:1px;vertical-align:middle"></span>跑位</span>
+  <span><span style="display:inline-block;width:18px;height:2px;border-top:2px dashed rgba(255,68,136,0.8);vertical-align:middle"></span>传球</span>
 </div>
-
-<div class="anim">
-  <button class="btn" onclick="RecKF()">📷 记录阶段</button>
-  <button class="btn" id="bPly" onclick="PlayTgl()">▶ 播放</button>
-  <span style="font-size:11px;color:#4a6878">速度</span>
-  <input type="range" id="spd" min="0.5" max="3" step="0.5" value="1">
-  <span style="font-size:11px;color:#4a6878;min-width:44px" id="kfLbl">0 阶段</span>
-  <button class="btn" onclick="ClrKF()">🗑 清空阶段</button>
-</div>
-
-<div style="margin-top:10px">
-  <div style="display:flex;align-items:center;gap:8px">
-    <span style="font-size:12px;color:#b0cede;font-weight:500">战术方案</span>
-    <button class="btn" style="padding:3px 8px;font-size:11px" onclick="NewPlan()">＋ 新建</button>
+<div class="bottom-row">
+  <div class="gpanel" style="flex:2;min-width:0">
+    <div class="ptitle">▶ 动画演示</div>
+    <div class="arow">
+      <button class="btn" onclick="RecKF()" style="font-size:11px">📷 记录阶段</button>
+      <button class="btn" id="bPly" onclick="PlayTgl()" style="font-size:11px">▶ 播放</button>
+      <span class="slbl">速度</span>
+      <input type="range" id="spd" min="0.5" max="3" step="0.5" value="1">
+      <span class="slbl" id="kfLbl">0 阶段</span>
+      <button class="btn danger" onclick="ClrKF()" style="font-size:11px;padding:5px 9px">🗑</button>
+    </div>
   </div>
-  <div class="plist" id="pList"></div>
+  <div class="gpanel" style="min-width:160px">
+    <div class="ptitle" style="display:flex;align-items:center;gap:6px">≡ 战术方案<button class="btn" style="padding:2px 8px;font-size:11px;margin-left:auto" onclick="NewPlan()">＋</button></div>
+    <div class="plist" id="pList"></div>
+  </div>
 </div>
-</div><!-- /panel-board -->
+<div class="avpanel">
+  <div class="ptitle">⊙ 队员头像 — 点击上传 / 悬停删除</div>
+  <div class="avteam">Blue Team</div>
+  <div class="avgrid" id="avB"></div>
+  <div class="avteam">White Team</div>
+  <div class="avgrid" id="avW"></div>
+</div>
+</div>
+</div>
 
-<!-- ══════════════ GUIDE PANEL ══════════════ -->
 <div class="panel" id="panel-guide">
 <div class="guide">
-
-  <h2>🏊 关于本战术板</h2>
-  <div class="card">
-    <p>严格按照<strong style="color:#b0cede">世界泳联（World Aquatics）2025年竞赛规则</strong> Appendix 1 & 2 制作，场地尺寸、颜色标识与官方图示1:1还原。</p>
+  <h2>⚽ 关于本战术板</h2>
+  <div class="gcard">
+    <p>严格按照<strong style="color:rgba(180,220,255,0.9)">世界泳联 2025年竞赛规则</strong> Appendix 1 &amp; 2 制作，场地尺寸、颜色标识与官方图示1:1还原。</p>
     <div style="margin-top:8px">
       <span class="badge">📐 女子标准 25.00m × 20.00m</span>
       <span class="badge">🎨 官方色带配色</span>
       <span class="badge">⚽ 每队7人</span>
       <span class="badge">📱 手机/平板/电脑通用</span>
+      <span class="badge">⛶ 全屏模式</span>
     </div>
   </div>
-
-  <div class="divider"></div>
+  <div class="gdiv"></div>
   <h2>🎮 基本操作</h2>
-
   <h3>① 移动球员 / 球</h3>
-  <div class="card">
-    <div class="step"><div class="step-num">1</div><div class="step-txt">点击顶部 <strong>「▶ 移动」</strong> 按钮（默认已选中，蓝色高亮）</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-txt"><strong>手机/平板：</strong>用手指按住球员图标拖到目标位置松开<br><strong>电脑：</strong>鼠标按住拖动</div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-txt">黄色圆圈为球，同样可以拖动</div></div>
-    <div class="tip">💡 守门员（红色1号）站在球门前，可以拖入球门区域内摆位</div>
+  <div class="gcard">
+    <div class="step"><div class="snum">1</div><div class="stxt">点击顶部 <strong>「▶ 移动」</strong>按钮（默认已选中）</div></div>
+    <div class="step"><div class="snum">2</div><div class="stxt"><strong>手机/平板：</strong>手指按住球员图标拖到目标位置松开<br><strong>电脑：</strong>鼠标按住拖动</div></div>
+    <div class="step"><div class="snum">3</div><div class="stxt">黄色圆圈为球，同样可以拖动</div></div>
+    <div class="tip">💡 守门员（红色1号）可拖入球门区域内摆位</div>
   </div>
-
   <h3>② 绘制跑位线（青色实线箭头）</h3>
-  <div class="card">
-    <div class="step"><div class="step-num">1</div><div class="step-txt">点击 <strong>「→ 跑位」</strong> 按钮切换到跑位模式</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-txt">从某个<strong>球员图标</strong>按住往目标方向拖动，松开即生成箭头</div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-txt">青色实线 <span style="color:#00b8d4">──▶</span> 表示球员移动路线</div></div>
+  <div class="gcard">
+    <div class="step"><div class="snum">1</div><div class="stxt">点击 <strong>「→ 跑位」</strong>按钮切换到跑位模式</div></div>
+    <div class="step"><div class="snum">2</div><div class="stxt">从某个球员图标按住往目标方向拖动，松开即生成箭头</div></div>
   </div>
-
-  <h3>③ 绘制传球线（橙色虚线箭头）</h3>
-  <div class="card">
-    <div class="step"><div class="step-num">1</div><div class="step-txt">点击 <strong>「⤳ 传球」</strong> 按钮切换到传球模式</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-txt">从某个<strong>球员图标或球</strong>按住拖向传球目标，松开生成虚线箭头</div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-txt">橙色虚线 <span style="color:#ff8c40">- - ▶</span> 表示传球路线</div></div>
-    <div class="tip">💡 可以同时绘制多条跑位线和传球线，组合成完整战术图</div>
+  <h3>③ 绘制传球线（玫红虚线箭头）</h3>
+  <div class="gcard">
+    <div class="step"><div class="snum">1</div><div class="stxt">点击 <strong>「⤳ 传球」</strong>按钮切换到传球模式</div></div>
+    <div class="step"><div class="snum">2</div><div class="stxt">从某个球员图标或球按住拖向传球目标，松开生成虚线箭头</div></div>
   </div>
-
-  <h3>④ 撤销 / 清空箭头 / 复位</h3>
-  <div class="card">
-    <p><strong style="color:#b0cede">↩ 撤销</strong>：删除最后一条箭头</p>
-    <p><strong style="color:#b0cede">✕ 清空箭头</strong>：删除当前方案所有箭头，球员位置保留</p>
-    <p><strong style="color:#b0cede">↺ 复位</strong>：将所有球员恢复到默认初始站位，箭头不变</p>
+  <h3>④ 撤销 / 清空 / 复位</h3>
+  <div class="gcard">
+    <p><strong style="color:rgba(180,220,255,0.9)">↩ 撤销</strong>：删除最后一条箭头</p>
+    <p><strong style="color:rgba(180,220,255,0.9)">✕ 清空</strong>：删除当前方案所有箭头</p>
+    <p><strong style="color:rgba(180,220,255,0.9)">↺ 复位</strong>：将所有球员恢复到默认初始站位</p>
   </div>
-
-  <div class="divider"></div>
+  <h3>⑤ 全屏模式</h3>
+  <div class="gcard">
+    <div class="step"><div class="snum">1</div><div class="stxt">点击顶部 <strong>「⛶ 全屏」</strong>按钮</div></div>
+    <div class="step"><div class="snum">2</div><div class="stxt">战术板铺满整个屏幕，所有功能仍可正常使用</div></div>
+    <div class="step"><div class="snum">3</div><div class="stxt">点击右上角 <strong>「退出全屏」</strong>或按 <strong>Esc</strong> 键返回</div></div>
+    <div class="tip">💡 iPad 全屏展示给球员讲解战术效果最佳</div>
+  </div>
+  <div class="gdiv"></div>
   <h2>🗂 战术方案管理</h2>
-  <div class="card">
-    <p>每个「方案」独立保存自己的<strong style="color:#b0cede">站位 + 箭头 + 动画阶段</strong>，方便同时准备多套战术。</p>
-    <div style="margin-top:10px">
-      <div class="step"><div class="step-num">＋</div><div class="step-txt"><strong>新建方案：</strong>点击「＋ 新建」，自动创建一个新的空白方案</div></div>
-      <div class="step"><div class="step-num">✏</div><div class="step-txt"><strong>重命名：</strong>点方案右侧铅笔图标，输入自定义名称（如「反快攻」「上人战术」）</div></div>
-      <div class="step"><div class="step-num">🗑</div><div class="step-txt"><strong>删除：</strong>点方案右侧垃圾桶图标（至少保留1个方案）</div></div>
-      <div class="step"><div class="step-num">点</div><div class="step-txt"><strong>切换方案：</strong>直接点击方案名称，即时切换场地显示</div></div>
-    </div>
-    <div class="tip">💡 建议提前在电脑上布置好多套方案，训练时用平板展示给球员看</div>
+  <div class="gcard">
+    <div class="step"><div class="snum">＋</div><div class="stxt"><strong>新建方案：</strong>点击「＋」，创建新的空白方案</div></div>
+    <div class="step"><div class="snum">✏</div><div class="stxt"><strong>重命名：</strong>点方案右侧铅笔图标，输入自定义名称</div></div>
+    <div class="step"><div class="snum">🗑</div><div class="stxt"><strong>删除：</strong>点方案右侧垃圾桶图标（至少保留1个）</div></div>
+    <div class="tip">💡 建议提前布置好多套方案，训练时切换展示</div>
   </div>
-
-  <div class="divider"></div>
+  <div class="gdiv"></div>
   <h2>🎬 动画演示战术</h2>
-  <div class="card">
-    <p>可以录制多个「阶段」，播放时球员和球会平滑移动，直观演示整套战术执行过程。</p>
-    <div style="margin-top:10px">
-      <div class="step"><div class="step-num">1</div><div class="step-txt">摆好<strong>第一阶段</strong>的站位（如开球站位）</div></div>
-      <div class="step"><div class="step-num">2</div><div class="step-txt">点 <strong>「📷 记录阶段」</strong>，保存当前站位为第1帧</div></div>
-      <div class="step"><div class="step-num">3</div><div class="step-txt">拖动球员到<strong>第二阶段</strong>站位（如切入后位置）</div></div>
-      <div class="step"><div class="step-num">4</div><div class="step-txt">再次点 <strong>「📷 记录阶段」</strong>，保存第2帧</div></div>
-      <div class="step"><div class="step-num">5</div><div class="step-txt">重复以上步骤录制所有阶段（建议3-5个阶段）</div></div>
-      <div class="step"><div class="step-num">▶</div><div class="step-txt">点 <strong>「▶ 播放」</strong>，球员自动流畅移动演示战术</div></div>
-    </div>
-    <p style="margin-top:8px"><strong style="color:#b0cede">速度滑块：</strong>向左慢速（适合讲解），向右快速（适合整体演示）</p>
-    <p><strong style="color:#b0cede">🗑 清空阶段：</strong>清除所有录制的帧，重新录制</p>
-    <div class="tip">💡 至少需要2个阶段才能播放动画。阶段数量不限，可以录制完整的一次进攻</div>
+  <div class="gcard">
+    <div class="step"><div class="snum">1</div><div class="stxt">摆好第一阶段的站位</div></div>
+    <div class="step"><div class="snum">2</div><div class="stxt">点 <strong>「📷 记录阶段」</strong>保存为第1帧</div></div>
+    <div class="step"><div class="snum">3</div><div class="stxt">拖动球员到第二阶段站位，再次记录</div></div>
+    <div class="step"><div class="snum">4</div><div class="stxt">重复录制所有阶段（建议3–5个）</div></div>
+    <div class="step"><div class="snum">▶</div><div class="stxt">点 <strong>「▶ 播放」</strong>，球员自动平滑移动演示战术</div></div>
+    <div class="tip">💡 至少需要2个阶段才能播放动画。速度滑块可调节快慢</div>
   </div>
-
-  <div class="divider"></div>
+  <div class="gdiv"></div>
+  <h2>🖼 上传队员头像</h2>
+  <div class="gcard">
+    <div class="step"><div class="snum">1</div><div class="stxt">在下方「队员头像」区域，找到对应队员编号</div></div>
+    <div class="step"><div class="snum">2</div><div class="stxt">点击圆形图标，弹出上传窗口</div></div>
+    <div class="step"><div class="snum">3</div><div class="stxt">选择图片（JPG/PNG，建议正方形）→ 点「确认」</div></div>
+    <div class="step"><div class="snum">4</div><div class="stxt">战术板上该球员图标立即显示头像，悬停可删除</div></div>
+  </div>
+  <div class="gdiv"></div>
   <h2>🏟 场地标识说明</h2>
-  <div class="card">
-    <p style="margin-bottom:8px">场地严格按照世界泳联2025年规则 Appendix 1 官方图示还原：</p>
-    <div><span class="tag red">红色实线</span> 2米线（进攻方禁区边界）</div>
-    <div style="margin-top:5px"><span class="tag">绿色虚线</span> 5米线</div>
-    <div style="margin-top:5px"><span class="tag blue">白色虚线</span> 中场线</div>
-    <div style="margin-top:5px"><span class="tag red">红色虚线框</span> 2米禁区（守门员活动区域）</div>
-    <div style="margin-top:5px"><span class="tag">色带</span> 深蓝=0.30m球篮区 / 红=2m区 / 黄=3m区 / 绿=开放区</div>
-    <div style="margin-top:5px"><span class="tag blue">白色方框</span> 球门（宽3.16m，深0.30m）</div>
-    <p style="margin-top:8px">点顶部 <strong style="color:#b0cede">「≡ 隐藏标线」</strong> 可切换显示/隐藏所有标线，保持场地整洁。</p>
-  </div>
-
-  <div class="divider"></div>
-  <h2>📱 添加到手机桌面（推荐）</h2>
-  <div class="card">
-    <h3 style="color:#8ac8d8;margin-bottom:8px">iPhone / iPad（Safari）</h3>
-    <div class="step"><div class="step-num">1</div><div class="step-txt">用 <strong>Safari</strong> 打开本文件链接</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-txt">点底部分享按钮 <strong>「⎋」</strong></div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-txt">选 <strong>「添加到主屏幕」</strong></div></div>
-    <div class="step"><div class="step-num">4</div><div class="step-txt">命名「水球战术板」→ 点「添加」</div></div>
-    <div class="tip">✅ 桌面出现图标后，点开即全屏使用，无需找文件</div>
-
-    <h3 style="color:#8ac8d8;margin:12px 0 8px">Android（Chrome）</h3>
-    <div class="step"><div class="step-num">1</div><div class="step-txt">用 <strong>Chrome</strong> 打开本文件</div></div>
-    <div class="step"><div class="step-num">2</div><div class="step-txt">点右上角 <strong>「⋮」</strong> 菜单</div></div>
-    <div class="step"><div class="step-num">3</div><div class="step-txt">选 <strong>「添加到主屏幕」</strong></div></div>
-    <div class="tip">✅ 同样出现桌面图标，全屏启动</div>
-
-    <h3 style="color:#8ac8d8;margin:12px 0 8px">电脑</h3>
-    <p style="color:#8aaabb;font-size:13px">将 HTML 文件拖到桌面，双击用浏览器直接打开即可，无需安装软件，无需联网。</p>
-  </div>
-
-  <div class="divider"></div>
-  <h2>💡 教练实用建议</h2>
-  <div class="card">
+  <div class="gcard">
     <ul>
-      <li>训练前在电脑上预先制作好本场比赛的所有战术方案并命名</li>
-      <li>将文件链接发到球队微信群，每位教练各自保存到桌面</li>
-      <li>训练时用 iPad 展示，触屏拖拽讲解比白板更直观</li>
-      <li>用动画演示功能录制完整战术流程，让球员直接看懂站位变化</li>
-      <li>比赛间歇可以快速新建方案，实时调整战术部署</li>
+      <li>白色实线 — 球门线 / 中场线（左右各一，完全对称）</li>
+      <li>红色实线 — 2米线（左侧2m / 右侧2m，对称）</li>
+      <li>黄色区域 — 5–6米区（左侧5m→6m / 右侧5m→6m，对称）</li>
+      <li>绿色虚线 — 6米线（左侧6m / 右侧6m，对称）</li>
+      <li>红色虚线框 — 2m Area（球门前禁区）</li>
+      <li>顶部/底部彩色色带 — 深蓝/红/黄/绿，对应官方场地边带</li>
     </ul>
   </div>
-
-  <p style="text-align:center;color:#2a4858;font-size:11px;margin-top:20px;padding-bottom:20px">
-    水球战术板 ｜ 世界泳联竞赛规则 2025年1月起生效<br>
-    由 Claude (Anthropic) 制作
+  <div class="gdiv"></div>
+  <h2>📱 添加到手机桌面</h2>
+  <div class="gcard">
+    <h3>iPhone / iPad（Safari）</h3>
+    <div class="step"><div class="snum">1</div><div class="stxt">用 <strong>Safari</strong> 打开本页链接</div></div>
+    <div class="step"><div class="snum">2</div><div class="stxt">点底部分享按钮 <strong>「⎋」</strong></div></div>
+    <div class="step"><div class="snum">3</div><div class="stxt">选 <strong>「添加到主屏幕」</strong>→ 确认</div></div>
+    <div class="tip">✅ 桌面出现图标，点开即可使用，配合「⛶ 全屏」按钮效果最佳</div>
+    <h3 style="margin-top:12px">Android（Chrome）</h3>
+    <div class="step"><div class="snum">1</div><div class="stxt">用 <strong>Chrome</strong> 打开本页链接</div></div>
+    <div class="step"><div class="snum">2</div><div class="stxt">点右上角「⋮」→ <strong>「添加到主屏幕」</strong></div></div>
+    <div class="tip">✅ 同样出现桌面图标，全屏启动</div>
+  </div>
+  <div class="gdiv"></div>
+  <h2>💡 教练实用建议</h2>
+  <div class="gcard">
+    <ul>
+      <li>训练前在电脑上预先制作好所有战术方案并命名</li>
+      <li>将链接发到球队微信群，每位教练各自保存到桌面</li>
+      <li>训练时用 iPad 开启全屏模式展示，视野最大化</li>
+      <li>用动画演示录制完整战术流程，让球员直接看懂站位变化</li>
+      <li>比赛间歇新建方案，实时调整战术部署</li>
+    </ul>
+  </div>
+  <p style="text-align:center;color:rgba(0,80,120,0.4);font-size:11px;margin-top:20px;padding-bottom:20px">
+    水球战术板 ｜ 世界泳联竞赛规则 2025年1月起生效<br>由 Claude (Anthropic) 制作
   </p>
-
 </div>
-</div><!-- /panel-guide -->
+</div>
+
+<div id="fsOverlay">
+  <div class="topbar">
+    <span class="brand">⬡ tactics</span>
+    <button class="btn on" id="fsSel" onclick="M('sel')">▶ 移动</button>
+    <button class="btn" id="fsRun" onclick="M('run')">→ 跑位</button>
+    <button class="btn" id="fsPas" onclick="M('pas')">⤳ 传球</button>
+    <div class="sep"></div>
+    <button class="btn" onclick="Undo()">↩ 撤销</button>
+    <button class="btn danger" onclick="ClrArr()">✕ 清空</button>
+    <button class="btn" onclick="Reset()">↺ 复位</button>
+    <div class="sep"></div>
+    <button class="btn" id="fsLn" onclick="TglLines()">⊞ 标线</button>
+    <div class="sep"></div>
+    <button class="btn" onclick="RecKF()">📷 记录</button>
+    <button class="btn" id="fsPly" onclick="PlayTgl()">▶ 播放</button>
+    <span class="slbl" style="margin:0 4px">速度</span>
+    <input type="range" id="fsspd" min="0.5" max="3" step="0.5" value="1" style="width:80px;accent-color:rgba(0,200,255,0.8)">
+    <span class="slbl" id="fsKfLbl" style="min-width:44px">0 阶段</span>
+    <div class="sep"></div>
+    <button class="btn" onclick="NewPlan()">＋ 新方案</button>
+    <span class="slbl" id="fsPlanName" style="margin:0 6px;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+    <button class="btn danger" style="margin-left:auto" onclick="closeFS()">✕ 退出全屏</button>
+  </div>
+  <div class="stage-wrap" id="fsStage"></div>
+  <div class="leg" style="margin-top:6px;flex-shrink:0">
+    <span><span style="width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#2ea0ff,#0a3a90);border:1px solid rgba(0,140,255,0.4);display:inline-block"></span>蓝队 1–7</span>
+    <span><span style="width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#e8f4ff,#7ab0d8);border:1px solid rgba(180,220,255,0.4);display:inline-block"></span>白队 1–7</span>
+    <span><span style="width:9px;height:9px;border-radius:50%;background:linear-gradient(135deg,#ff5070,#880020);display:inline-block"></span>守门员</span>
+    <span><span style="display:inline-block;width:18px;height:2px;background:rgba(0,220,255,0.8);border-radius:1px;vertical-align:middle"></span>跑位</span>
+    <span><span style="display:inline-block;width:18px;height:2px;border-top:2px dashed rgba(255,68,136,0.8);vertical-align:middle"></span>传球</span>
+    <span style="margin-left:auto;font-size:10px;color:rgba(0,160,255,0.35)">按 Esc 退出全屏</span>
+  </div>
+</div>
+
+<div class="modal-wrap" id="modalWrap">
+  <div class="modal-box">
+    <div class="modal-ttl" id="mttl">upload avatar</div>
+    <div class="uparea" onclick="document.getElementById('fInput').click()">
+      <div id="pvWrap" style="display:none"><img id="pvImg" class="prev-img"/></div>
+      <div id="upHint">📷 点击选择图片<br><span style="font-size:11px;opacity:.5">JPG / PNG · 建议正方形</span></div>
+    </div>
+    <input type="file" id="fInput" accept="image/*" style="display:none" onchange="onFS2(event)">
+    <div class="mbrow">
+      <button class="btn on" style="flex:1;justify-content:center" onclick="confUp()">✓ 确认</button>
+      <button class="btn danger" style="flex:1;justify-content:center" onclick="closeM()">✕ 取消</button>
+    </div>
+  </div>
+</div>
 
 <script>
-// ── TAB SWITCH
-function switchTab(t){
-  ['board','guide'].forEach(id=>{
-    document.getElementById('tab-'+id).classList.toggle('on',id===t);
-    document.getElementById('panel-'+id).classList.toggle('on',id===t);
-  });
-}
+function switchTab(t){['board','guide'].forEach(id=>{document.getElementById('tab-'+id).classList.toggle('on',id===t);document.getElementById('panel-'+id).classList.toggle('on',id===t);});}
 window.switchTab=switchTab;
-
-// ══════════════════════════════════════════
-// BOARD LOGIC
-// ══════════════════════════════════════════
 (function(){
 const NS="http://www.w3.org/2000/svg";
 const FX=150,FY=62,FW=520,FH=416;
-const scX=FW/25,scY=FH/20;
-function px(m){return FX+m*scX;}
-function py(m){return FY+m*scY;}
-
-const SEGS=[
-  {a:0,b:.30,c:'#1e3a80'},{a:.30,b:2.30,c:'#d42028'},{a:2.30,b:5.30,c:'#e8b800'},{a:5.30,b:12.5,c:'#2ea040'},
-  {a:12.5,b:19.70,c:'#2ea040'},{a:19.70,b:22.70,c:'#e8b800'},{a:22.70,b:24.70,c:'#d42028'},{a:24.70,b:25,c:'#1e3a80'},
-];
-const GI=3.00*scY,GP=.08*scY,GT=(3.16)*scY,GD=.30*scX,GY2=FY+FH/2-GT/2;
-let showLines=true;
-
-function sve(tag,a){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);return e;}
-function tx(x,y,s,fs,fill,anchor,xtra){const t=sve('text',{x,y,'text-anchor':anchor||'middle','font-size':fs||'10px',fill:fill||'#6a8898',...(xtra||{})});t.textContent=s;return t;}
-function ln(x1,y1,x2,y2,s,w,d){const a={x1,y1,x2,y2,stroke:s,'stroke-width':w||1};if(d)a['stroke-dasharray']=d;return sve('line',a);}
-
-function renderField(){
+const sX=FW/25,sY=FH/20;
+function px(m){return FX+m*sX;}function py(m){return FY+m*sY;}
+const AV={};let pKey=null,pURL=null;
+const SEGS=[{a:0,b:.30,c:'#1e3a80'},{a:.30,b:2.30,c:'#c83028'},{a:2.30,b:5.30,c:'#d4a800'},{a:5.30,b:6.30,c:'#d4a800'},{a:6.30,b:12.5,c:'#1e8838'},{a:12.5,b:18.70,c:'#1e8838'},{a:18.70,b:19.70,c:'#d4a800'},{a:19.70,b:22.70,c:'#d4a800'},{a:22.70,b:24.70,c:'#c83028'},{a:24.70,b:25,c:'#1e3a80'}];
+const GI=3*sY,GP=.08*sY,GT=3.16*sY,GD=.3*sX,GY2=FY+FH/2-GT/2;
+const ZP=2*sY,ZH=GT+ZP*2,ZY=FY+FH/2-ZH/2,ZW=2*sX;
+let showL=true,isFS=false;
+function el(tag,a){const e=document.createElementNS(NS,tag);for(const k in a)e.setAttribute(k,a[k]);return e;}
+function tx(x,y,s,fs,fill,anchor,xtra){const t=el('text',{x,y,'text-anchor':anchor||'middle','font-size':fs||'10px',fill:fill||'rgba(60,120,160,0.6)',...(xtra||{})});t.textContent=s;return t;}
+function ln(x1,y1,x2,y2,s,w,d){const a={x1,y1,x2,y2,stroke:s,'stroke-width':w||1};if(d)a['stroke-dasharray']=d;return el('line',a);}
+function openFS(){isFS=true;document.getElementById('fsStage').appendChild(document.getElementById('sv'));document.getElementById('fsOverlay').classList.add('show');syncCtrl();document.getElementById('fsPlanName').textContent=plan().name;document.getElementById('fsspd').value=document.getElementById('spd').value;}
+function closeFS(){isFS=false;document.getElementById('stageMain').appendChild(document.getElementById('sv'));document.getElementById('fsOverlay').classList.remove('show');syncCtrl();}
+window.openFS=openFS;window.closeFS=closeFS;
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&isFS)closeFS();});
+function syncCtrl(){
+  const mm={sel:'Sel',run:'Run',pas:'Pas'};
+  Object.entries(mm).forEach(([m,s])=>{const on=mode===m;['b'+s,'fs'+s].forEach(id=>{const b=document.getElementById(id);if(b)b.classList.toggle('on',on);});});
+  const lt=showL?'⊞ 标线':'⊡ 标线';['bLn','fsLn'].forEach(id=>{const b=document.getElementById(id);if(b)b.textContent=lt;});
+  const kt=plan().kf.length+' 阶段';['kfLbl','fsKfLbl'].forEach(id=>{const b=document.getElementById(id);if(b)b.textContent=kt;});
+  const pt=playing?'⏸ 暂停':'▶ 播放';['bPly','fsPly'].forEach(id=>{const b=document.getElementById(id);if(b)b.textContent=pt;});
+}
+function rField(){
   const g=document.getElementById('gF');g.innerHTML='';
-  const TY=10,TH=22,TW=FW*.68,TX2=FX+(FW-TW)/2;
-  g.appendChild(sve('rect',{x:TX2,y:TY,width:TW,height:TH,rx:3,fill:'#1a4090',stroke:'#3060c0','stroke-width':.8}));
-  for(let i=0;i<20;i++){const sx=TX2+12+i*(TW-24)/19;g.appendChild(sve('rect',{x:sx-5,y:TY+3,width:10,height:TH-6,rx:1.5,fill:'#ddeeff',stroke:'#90b0d8','stroke-width':.4}));}
-  g.appendChild(tx(FX+FW/2,TY-2,'Official table — Height = 0.70m','9px','#4a6880'));
-  const BY=TY+TH+6,BH=20;
-  SEGS.forEach(s=>g.appendChild(sve('rect',{x:px(s.a),y:BY,width:px(s.b)-px(s.a),height:BH,fill:s.c})));
-  [2,5,12.5,20,23].forEach(m=>g.appendChild(sve('rect',{x:px(m)-4,y:BY+2,width:8,height:BH-4,rx:1,fill:'#0c1a28',stroke:'#304060','stroke-width':.5})));
-  g.appendChild(tx(FX-2,BY+10,'Balls Basket','8px','#4a6880','end'));
-  g.appendChild(tx(FX-2,BY+20,'Goal Judge','8px','#4a6880','end'));
-  g.appendChild(tx(FX+FW+2,BY+10,'Goal Judge','8px','#4a6880','start'));
-  g.appendChild(tx(FX+FW+2,BY+20,'Balls Basket','8px','#4a6880','start'));
-  g.appendChild(tx(px(2),BY-4,'Shot Clock','8px','#4a6880'));
-  g.appendChild(tx(px(23),BY-4,'Shot Clock','8px','#4a6880'));
-  g.appendChild(sve('rect',{x:FX,y:FY,width:FW,height:FH,rx:3,fill:'#b8d8ec'}));
-  g.appendChild(sve('rect',{x:FX,y:FY,width:FW,height:FH,rx:3,fill:'#4a9cc8',opacity:'.35'}));
-  for(let i=1;i<8;i++)g.appendChild(ln(FX,FY+FH*i/8,FX+FW,FY+FH*i/8,'#80b8d0',.5));
-  if(showLines){
-    [{m:0,s:'#fff',w:2},{m:2,s:'#d42028',w:1.6},{m:5,s:'#2ea040',w:1.2,d:'5 4'},{m:12.5,s:'#fff',w:1.4,d:'8 5'},{m:20,s:'#2ea040',w:1.2,d:'5 4'},{m:23,s:'#d42028',w:1.6},{m:25,s:'#fff',w:2}]
-    .forEach(l=>g.appendChild(ln(px(l.m),FY,px(l.m),FY+FH,l.s,l.w,l.d)));
-    g.appendChild(tx(px(0),FY-8,'球门线','9px','#fff'));g.appendChild(tx(px(2),FY-8,'2m','9px','#d42028'));
-    g.appendChild(tx(px(5),FY-8,'5m','9px','#2ea040'));g.appendChild(tx(px(12.5),FY-8,'中线','9px','#fff'));
-    g.appendChild(tx(px(23),FY-8,'2m','9px','#d42028'));g.appendChild(tx(px(25),FY-8,'球门线','9px','#fff'));
-    const DY=FY+18,DC='#1a3050';
-    [[0,.30,'0.30'],[.30,2.30,'2.00'],[2.30,5.30,'3.00'],[5.30,6.30,'1.00']].forEach(([a,b,lb])=>{g.appendChild(ln(px(a),DY-4,px(a),DY+4,DC,.8));g.appendChild(ln(px(b),DY-4,px(b),DY+4,DC,.8));g.appendChild(ln(px(a),DY,px(b),DY,DC,.8));g.appendChild(tx((px(a)+px(b))/2,DY-6,lb,'8px',DC));});
-    [[24.70,25,'0.30'],[22.70,24.70,'2.00'],[19.70,22.70,'3.00'],[18.70,19.70,'1.00']].forEach(([a,b,lb])=>{g.appendChild(ln(px(a),DY-4,px(a),DY+4,DC,.8));g.appendChild(ln(px(b),DY-4,px(b),DY+4,DC,.8));g.appendChild(ln(px(a),DY,px(b),DY,DC,.8));g.appendChild(tx((px(a)+px(b))/2,DY-6,lb,'8px',DC));});
-    g.appendChild(tx(px(12.5),DY-6,'Men: 13.00m - Women: 13.00m','8px',DC));
+  const TY=10,TH=22,TW=FW*.68,TX=FX+(FW-TW)/2;
+  g.appendChild(el('rect',{x:TX,y:TY,width:TW,height:TH,rx:4,fill:'rgba(8,30,80,0.7)',stroke:'rgba(0,140,220,0.25)','stroke-width':.8}));
+  g.appendChild(el('rect',{x:TX+1,y:TY+1,width:TW-2,height:TH*.5,rx:3,fill:'rgba(255,255,255,0.04)'}));
+  for(let i=0;i<20;i++){const sx=TX+12+i*(TW-24)/19;g.appendChild(el('rect',{x:sx-5,y:TY+3,width:10,height:TH-6,rx:2,fill:'rgba(180,220,255,0.10)',stroke:'rgba(80,160,220,0.15)','stroke-width':.4}));}
+  g.appendChild(tx(FX+FW/2,TY-3,'Official table — Height = 0.70m','8px','rgba(0,160,220,0.4)'));
+  const BY=TY+TH+5,BH=18;
+  SEGS.forEach(s=>{g.appendChild(el('rect',{x:px(s.a),y:BY,width:px(s.b)-px(s.a),height:BH,fill:s.c,opacity:'.85'}));g.appendChild(el('rect',{x:px(s.a),y:BY,width:px(s.b)-px(s.a),height:5,fill:'rgba(255,255,255,0.12)'}));});
+  [2,5,6,12.5,19,20,23].forEach(m=>g.appendChild(el('rect',{x:px(m)-4,y:BY+2,width:8,height:BH-4,rx:1,fill:'rgba(2,8,22,0.85)',stroke:'rgba(0,100,180,0.3)','stroke-width':.5})));
+  g.appendChild(tx(FX-4,BY+8,'Balls Basket','7px','rgba(0,140,200,0.45)','end'));g.appendChild(tx(FX-4,BY+18,'Goal Judge','7px','rgba(0,140,200,0.45)','end'));
+  g.appendChild(tx(FX+FW+4,BY+8,'Goal Judge','7px','rgba(0,140,200,0.45)','start'));g.appendChild(tx(FX+FW+4,BY+18,'Balls Basket','7px','rgba(0,140,200,0.45)','start'));
+  g.appendChild(tx(px(2),BY-4,'Shot Clock','7px','rgba(0,160,220,0.4)'));g.appendChild(tx(px(23),BY-4,'Shot Clock','7px','rgba(0,160,220,0.4)'));
+  g.appendChild(el('rect',{x:FX,y:FY,width:FW,height:FH,rx:4,fill:'url(#wtr)'}));
+  g.appendChild(el('rect',{x:FX,y:FY,width:FW,height:FH,rx:4,fill:'url(#pgrid)'}));
+  g.appendChild(el('rect',{x:px(5),y:FY,width:px(6)-px(5),height:FH,fill:'url(#yZ)'}));
+  g.appendChild(el('rect',{x:px(19),y:FY,width:px(20)-px(19),height:FH,fill:'url(#yZ)'}));
+  if(showL){
+    [{m:0,s:'rgba(200,230,255,0.55)',w:1.6},{m:2,s:'rgba(230,60,80,0.75)',w:1.3},{m:5,s:'rgba(230,190,0,0.7)',w:1.1},{m:6,s:'rgba(30,180,80,0.6)',w:1,d:'5 4'},{m:12.5,s:'rgba(160,210,255,0.4)',w:1.2,d:'8 5'},{m:19,s:'rgba(30,180,80,0.6)',w:1,d:'5 4'},{m:20,s:'rgba(230,190,0,0.7)',w:1.1},{m:23,s:'rgba(230,60,80,0.75)',w:1.3},{m:25,s:'rgba(200,230,255,0.55)',w:1.6}]
+    .forEach(v=>{g.appendChild(ln(px(v.m),FY,px(v.m),FY+FH,v.s.replace(/[\d.]+\)$/,'0.12)'),4,v.d));g.appendChild(ln(px(v.m),FY,px(v.m),FY+FH,v.s,v.w,v.d));});
+    [{m:0,lb:'球门线',c:'rgba(180,220,255,0.75)'},{m:2,lb:'2m',c:'rgba(240,80,100,0.85)'},{m:5,lb:'5m',c:'rgba(230,190,0,0.85)'},{m:6,lb:'6m',c:'rgba(50,200,100,0.8)'},{m:12.5,lb:'中线',c:'rgba(140,200,255,0.65)'},{m:19,lb:'6m',c:'rgba(50,200,100,0.8)'},{m:20,lb:'5m',c:'rgba(230,190,0,0.85)'},{m:23,lb:'2m',c:'rgba(240,80,100,0.85)'},{m:25,lb:'球门线',c:'rgba(180,220,255,0.75)'}]
+    .forEach(v=>{const w=v.lb.length*6+8;g.appendChild(el('rect',{x:px(v.m)-w/2,y:FY-17,width:w,height:13,rx:3,fill:'rgba(2,10,24,0.72)',stroke:v.c.replace(/[\d.]+\)$/,'0.28)'),'stroke-width':.5}));g.appendChild(tx(px(v.m),FY-7,v.lb,'8px',v.c));});
+    g.appendChild(tx(px(5.5),FY+13,'5–6m','8px','rgba(220,180,0,0.6)'));g.appendChild(tx(px(19.5),FY+13,'5–6m','8px','rgba(220,180,0,0.6)'));
+    const DY=FY+25,DC='rgba(0,140,200,0.42)';
+    [[0,.30,'0.30'],[.30,2.30,'2.00'],[2.30,5.30,'3.00'],[5.30,6.30,'1.00']].forEach(([a,b,lb])=>{g.appendChild(ln(px(a),DY-3,px(a),DY+3,DC,.7));g.appendChild(ln(px(b),DY-3,px(b),DY+3,DC,.7));g.appendChild(ln(px(a),DY,px(b),DY,DC,.7));g.appendChild(tx((px(a)+px(b))/2,DY-5,lb,'8px',DC));});
+    [[24.70,25,'0.30'],[22.70,24.70,'2.00'],[19.70,22.70,'3.00'],[18.70,19.70,'1.00']].forEach(([a,b,lb])=>{g.appendChild(ln(px(a),DY-3,px(a),DY+3,DC,.7));g.appendChild(ln(px(b),DY-3,px(b),DY+3,DC,.7));g.appendChild(ln(px(a),DY,px(b),DY,DC,.7));g.appendChild(tx((px(a)+px(b))/2,DY-5,lb,'8px',DC));});
+    g.appendChild(tx(px(12.5),DY-5,'Men: 13.00m — Women: 13.00m','8px',DC));
   }
-  g.appendChild(sve('rect',{x:FX,y:FY,width:px(2)-FX,height:FH,fill:'rgba(212,32,40,.07)',stroke:'#d42028','stroke-width':1.4,'stroke-dasharray':'6 4'}));
-  g.appendChild(sve('rect',{x:px(23),y:FY,width:FX+FW-px(23),height:FH,fill:'rgba(212,32,40,.07)',stroke:'#d42028','stroke-width':1.4,'stroke-dasharray':'6 4'}));
-  g.appendChild(tx(FX+4,FY+16,'2m Area','9px','#d42028','start'));
-  g.appendChild(tx(px(23)+4,FY+16,'2m Area','9px','#d42028','start'));
-  g.appendChild(tx(px(1),FY+FH/2-GT/2-12,'2.00','8px','#d42028'));
-  g.appendChild(tx(px(1),FY+FH/2+GT/2+16,'2.00','8px','#d42028'));
-  // Goals
-  g.appendChild(sve('rect',{x:FX-GD,y:GY2,width:GD+GP/2,height:GP,fill:'#fff',stroke:'#aaa','stroke-width':.5}));
-  g.appendChild(sve('rect',{x:FX-GD,y:GY2+GT-GP,width:GD+GP/2,height:GP,fill:'#fff',stroke:'#aaa','stroke-width':.5}));
-  g.appendChild(sve('rect',{x:FX-GD,y:GY2,width:GP,height:GT,fill:'#fff',stroke:'#aaa','stroke-width':.5}));
-  g.appendChild(sve('rect',{x:FX-GD+GP,y:GY2+GP,width:GD-GP,height:GI,fill:'#0a1a28',opacity:'.8'}));
-  g.appendChild(sve('rect',{x:FX+FW-GP/2,y:GY2,width:GD+GP/2,height:GP,fill:'#fff',stroke:'#aaa','stroke-width':.5}));
-  g.appendChild(sve('rect',{x:FX+FW-GP/2,y:GY2+GT-GP,width:GD+GP/2,height:GP,fill:'#fff',stroke:'#aaa','stroke-width':.5}));
-  g.appendChild(sve('rect',{x:FX+FW+GD-GP,y:GY2,width:GP,height:GT,fill:'#fff',stroke:'#aaa','stroke-width':.5}));
-  g.appendChild(sve('rect',{x:FX+FW,y:GY2+GP,width:GD-GP,height:GI,fill:'#0a1a28',opacity:'.8'}));
-  g.appendChild(tx(FX-GD-14,GY2+GT/2,'3.16m','8px','#8aaabb','end'));
-  g.appendChild(tx(FX+FW/2,FY+FH/2-10,'△  Ball Release Device','10px','#1a3a50'));
-  g.appendChild(tx(FX+FW/2,FY+FH/2+8,'——— 25.00m ———','10px','#1a3a50'));
-  const RX=FX+FW+52;
-  g.appendChild(tx(RX,FY+FH/2,'20.00m','9px','#4a6880','middle',{transform:`rotate(-90,${RX},${FY+FH/2})`}));
-  const BBY=FY+FH+4,BBH=20;
-  SEGS.forEach(s=>g.appendChild(sve('rect',{x:px(s.a),y:BBY,width:px(s.b)-px(s.a),height:BBH,fill:s.c})));
-  [2,5,12.5,20,23].forEach(m=>g.appendChild(sve('rect',{x:px(m)-4,y:BBY+2,width:8,height:BBH-4,rx:1,fill:'#0c1a28',stroke:'#304060','stroke-width':.5})));
-  g.appendChild(tx(FX+FW/2,BBY+BBH+10,'Flying Substitution Area','9px','#3a7850'));
-  g.appendChild(tx(FX+FW/2,BBY+BBH+22,'Platform: Width 1.00m — Height 0.70m (Above water level)','8px','#4a6878'));
-  const BDIM=BBY+BBH+36;
-  [[0,.30,'0.30'],[.30,2.30,'2.00'],[2.30,5.30,'3.00'],[5.30,6.30,'1.00']].forEach(([a,b,lb])=>{g.appendChild(ln(px(a),BDIM-3,px(a),BDIM+3,'#3a5870',.8));g.appendChild(ln(px(b),BDIM-3,px(b),BDIM+3,'#3a5870',.8));g.appendChild(ln(px(a),BDIM,px(b),BDIM,'#3a5870',.8));g.appendChild(tx((px(a)+px(b))/2,BDIM+10,lb,'8px','#4a6878'));});
-  [[24.70,25,'0.30'],[22.70,24.70,'2.00'],[19.70,22.70,'3.00'],[18.70,19.70,'1.00']].forEach(([a,b,lb])=>{g.appendChild(ln(px(a),BDIM-3,px(a),BDIM+3,'#3a5870',.8));g.appendChild(ln(px(b),BDIM-3,px(b),BDIM+3,'#3a5870',.8));g.appendChild(ln(px(a),BDIM,px(b),BDIM,'#3a5870',.8));g.appendChild(tx((px(a)+px(b))/2,BDIM+10,lb,'8px','#4a6878'));});
-  g.appendChild(tx(px(12.5),BDIM+10,'Men: 13.00m - Women: 13.00m','8px','#4a6878'));
-  const SPW=1.08*scX,SPH=2.00*scY,SPY=FY+FH-SPH;
-  g.appendChild(sve('rect',{x:FX-SPW,y:SPY,width:SPW,height:SPH,rx:2,fill:'#0c2030',stroke:'#c83028','stroke-width':2}));
-  g.appendChild(sve('rect',{x:FX+FW,y:SPY,width:SPW,height:SPH,rx:2,fill:'#0c2030',stroke:'#c83028','stroke-width':2}));
-  g.appendChild(tx(FX-SPW/2,SPY-5,'1.08','8px','#6a8898'));
-  g.appendChild(tx(FX+FW+SPW/2,SPY-5,'1.08','8px','#6a8898'));
-  g.appendChild(tx(FX-SPW/2,SPY+SPH/2,'2.00','8px','#6a8898','middle',{transform:`rotate(-90,${FX-SPW/2},${SPY+SPH/2})`}));
-  g.appendChild(sve('rect',{x:FX,y:FY,width:FW,height:FH,rx:3,fill:'none',stroke:'#204860','stroke-width':1.8}));
-  g.appendChild(tx(FX+FW/2,FY+FH+BBH+52,'女子标准场地 25.00m × 20.00m ｜ 世界泳联竞赛规则 2025年1月起生效','9px','#3a5060'));
+  g.appendChild(el('rect',{x:FX,y:ZY,width:ZW,height:ZH,fill:'url(#zL)',stroke:'rgba(255,40,80,0.55)','stroke-width':1.3,'stroke-dasharray':'6 3.5',rx:2}));
+  g.appendChild(el('rect',{x:px(23),y:ZY,width:ZW,height:ZH,fill:'url(#zR)',stroke:'rgba(255,40,80,0.55)','stroke-width':1.3,'stroke-dasharray':'6 3.5',rx:2}));
+  [[FX+ZW/2,'2m Area'],[px(23)+ZW/2,'2m Area']].forEach(([x,lb])=>{g.appendChild(el('rect',{x:x-22,y:ZY-15,width:44,height:13,rx:3,fill:'rgba(140,0,40,0.22)',stroke:'rgba(255,40,80,0.35)','stroke-width':.5}));g.appendChild(tx(x,ZY-5,lb,'8px','rgba(255,80,110,0.8)'));});
+  g.appendChild(tx(FX+5,FY+FH/2-GT/2-ZP/2,'2.00','8px','rgba(255,80,100,0.6)','start'));g.appendChild(tx(FX+5,FY+FH/2+GT/2+ZP/2,'2.00','8px','rgba(255,80,100,0.6)','start'));
+  [[FX-GD,false],[FX+FW,true]].forEach(([x0,isR])=>{g.appendChild(el('rect',{x:isR?x0:x0+GP,y:GY2+GP,width:GD-GP,height:GI,fill:'rgba(0,15,40,0.88)'}));[[x0,GY2,GD+(isR?0:GP/2),GP],[x0,GY2+GT-GP,GD+(isR?0:GP/2),GP],[isR?x0+GD-GP:x0,GY2,GP,GT]].forEach(([rx,ry,rw,rh])=>{g.appendChild(el('rect',{x:rx,y:ry,width:rw,height:rh,fill:'rgba(200,230,255,0.88)',stroke:'rgba(0,160,255,0.3)','stroke-width':.5}));g.appendChild(el('rect',{x:rx,y:ry,width:rw,height:4,rx:1,fill:'rgba(255,255,255,0.28)'}));});});
+  g.appendChild(tx(FX-GD-14,GY2+GT/2,'3.16m','8px','rgba(80,160,200,0.45)','end'));
+  g.appendChild(el('rect',{x:FX,y:FY,width:FW,height:FH/3.5,rx:4,fill:'url(#glHL)'}));
+  g.appendChild(tx(FX+FW/2,FY+FH/2-10,'△  Ball Release Device','10px','rgba(0,160,220,0.28)'));g.appendChild(tx(FX+FW/2,FY+FH/2+8,'——— 25.00m ———','10px','rgba(0,140,200,0.25)'));
+  const RX=FX+FW+50;g.appendChild(tx(RX,FY+FH/2,'20.00m','9px','rgba(0,140,200,0.38)','middle',{transform:`rotate(-90,${RX},${FY+FH/2})`}));
+  g.appendChild(el('rect',{x:FX-2,y:FY-2,width:FW+4,height:FH+4,rx:6,fill:'none',stroke:'rgba(0,80,160,0.18)','stroke-width':3}));g.appendChild(el('rect',{x:FX,y:FY,width:FW,height:FH,rx:4,fill:'none',stroke:'rgba(0,170,240,0.32)','stroke-width':1.4}));
+  const BBY=FY+FH+4,BBH=18;
+  SEGS.forEach(s=>{g.appendChild(el('rect',{x:px(s.a),y:BBY,width:px(s.b)-px(s.a),height:BBH,fill:s.c,opacity:'.85'}));});
+  [2,5,6,12.5,19,20,23].forEach(m=>g.appendChild(el('rect',{x:px(m)-4,y:BBY+2,width:8,height:BBH-4,rx:1,fill:'rgba(2,8,22,0.85)',stroke:'rgba(0,100,180,0.3)','stroke-width':.5})));
+  g.appendChild(tx(FX+FW/2,BBY+BBH+10,'Flying Substitution Area','8px','rgba(30,160,90,0.45)'));g.appendChild(tx(FX+FW/2,BBY+BBH+22,'Platform: Width 1.00m — Height 0.70m (Above water level)','7px','rgba(50,110,150,0.45)'));
+  const BD=BBY+BBH+34;
+  [[0,.30,'0.30'],[.30,2.30,'2.00'],[2.30,5.30,'3.00'],[5.30,6.30,'1.00']].forEach(([a,b,lb])=>{g.appendChild(ln(px(a),BD-2,px(a),BD+2,'rgba(0,110,170,0.35)',.7));g.appendChild(ln(px(b),BD-2,px(b),BD+2,'rgba(0,110,170,0.35)',.7));g.appendChild(ln(px(a),BD,px(b),BD,'rgba(0,110,170,0.35)',.7));g.appendChild(tx((px(a)+px(b))/2,BD+9,lb,'8px','rgba(50,110,150,0.45)'));});
+  [[24.70,25,'0.30'],[22.70,24.70,'2.00'],[19.70,22.70,'3.00'],[18.70,19.70,'1.00']].forEach(([a,b,lb])=>{g.appendChild(ln(px(a),BD-2,px(a),BD+2,'rgba(0,110,170,0.35)',.7));g.appendChild(ln(px(b),BD-2,px(b),BD+2,'rgba(0,110,170,0.35)',.7));g.appendChild(ln(px(a),BD,px(b),BD,'rgba(0,110,170,0.35)',.7));g.appendChild(tx((px(a)+px(b))/2,BD+9,lb,'8px','rgba(50,110,150,0.45)'));});
+  g.appendChild(tx(px(12.5),BD+9,'Men: 13.00m — Women: 13.00m','8px','rgba(50,110,150,0.45)'));
+  const SPW=1.08*sX,SPH=2*sY,SPY=FY+FH-SPH;
+  [[FX-SPW],[FX+FW]].forEach(([x0])=>{g.appendChild(el('rect',{x:x0,y:SPY,width:SPW,height:SPH,rx:3,fill:'rgba(8,18,36,0.82)',stroke:'rgba(200,30,50,0.5)','stroke-width':1.5}));g.appendChild(el('rect',{x:x0,y:SPY,width:SPW,height:5,rx:2,fill:'rgba(255,50,70,0.15)'}));});
+  g.appendChild(tx(FX-SPW/2,SPY-5,'1.08','7px','rgba(180,60,80,0.45)'));g.appendChild(tx(FX+FW+SPW/2,SPY-5,'1.08','7px','rgba(180,60,80,0.45)'));
+  g.appendChild(tx(FX+FW/2,584,'女子标准场地 25.00m × 20.00m ｜ 世界泳联竞赛规则 2025年1月起生效','8px','rgba(0,90,140,0.28)'));
 }
-
-function defPos(){return{
-  bGK:{x:px(.55),y:py(10)},wGK:{x:px(24.45),y:py(10)},
-  blue:[{num:2,x:px(3.5),y:py(2.2)},{num:3,x:px(3.5),y:py(6)},{num:4,x:px(3.5),y:py(10)},{num:5,x:px(3.5),y:py(14)},{num:6,x:px(3.5),y:py(17.8)},{num:7,x:px(8),y:py(10)}],
-  white:[{num:2,x:px(21.5),y:py(2.2)},{num:3,x:px(21.5),y:py(6)},{num:4,x:px(21.5),y:py(10)},{num:5,x:px(21.5),y:py(14)},{num:6,x:px(21.5),y:py(17.8)},{num:7,x:px(17),y:py(10)}],
-  ball:{x:px(12.5),y:py(10)}
-};}
-
-function mkPlan(name){const d=defPos();return{id:'p'+Date.now()+Math.random().toString(36).slice(2),name,bGK:{...d.bGK},wGK:{...d.wGK},blue:d.blue.map(p=>({...p})),white:d.white.map(p=>({...p})),ball:{...d.ball},arrows:[],kf:[]};}
-
-let plans=[mkPlan('进攻战术 1')],pid=plans[0].id,mode='sel',drag=null,dln=null,playing=false,raf2=null;
+function mkN(x,y,num,gid,tc,gk,avk){
+  const g=el('g',{});const R=15;const hasAv=avk&&AV[avk];
+  if(hasAv){
+    const cid='c_'+avk.replace(/\W/g,'')+'_'+Math.round(x)+Math.round(y);
+    const defs=document.getElementById('sv').querySelector('defs');
+    let cp=document.getElementById(cid);if(!cp){cp=el('clipPath',{id:cid});cp.appendChild(el('circle',{cx:x,cy:y,r:R}));defs.appendChild(cp);}else{cp.innerHTML='';cp.appendChild(el('circle',{cx:x,cy:y,r:R}));}
+    g.appendChild(el('circle',{cx:x,cy:y,r:R+3.5,fill:'none',stroke:gk?'rgba(255,80,100,0.22)':gid==='pB'?'rgba(0,180,255,0.18)':'rgba(180,220,255,0.15)','stroke-width':1.5}));
+    g.appendChild(el('image',{x:x-R,y:y-R,width:R*2,height:R*2,'clip-path':`url(#${cid})`,href:AV[avk],preserveAspectRatio:'xMidYMid slice'}));
+    const bc=gk?'rgba(255,80,100,0.8)':gid==='pB'?'rgba(0,210,255,0.75)':'rgba(200,230,255,0.7)';
+    g.appendChild(el('circle',{cx:x,cy:y,r:R,fill:'none',stroke:bc,'stroke-width':1.8}));
+    const bg=gk?'rgba(180,20,40,0.9)':gid==='pB'?'rgba(0,60,140,0.9)':'rgba(60,100,140,0.9)';
+    g.appendChild(el('circle',{cx:x+R*.62,cy:y+R*.62,r:6.5,fill:bg,stroke:'rgba(0,0,0,0.4)','stroke-width':.8}));
+    const bt=el('text',{x:x+R*.62,y:y+R*.62+1,'text-anchor':'middle','dominant-baseline':'central','font-size':'8px',fill:'#fff','font-weight':'600'});bt.textContent=num;g.appendChild(bt);
+  } else {
+    g.appendChild(el('circle',{cx:x+1,cy:y+2,r:R,fill:'rgba(0,0,0,0.35)'}));
+    g.appendChild(el('circle',{cx:x,cy:y,r:R+2.5,fill:'none',stroke:gk?'rgba(255,80,100,0.18)':gid==='pB'?'rgba(0,160,255,0.15)':'rgba(160,210,255,0.12)','stroke-width':1.5}));
+    g.appendChild(el('circle',{cx:x,cy:y,r:R,fill:`url(#${gid})`,stroke:gk?'rgba(255,100,120,0.55)':gid==='pB'?'rgba(0,150,255,0.45)':'rgba(170,210,255,0.35)','stroke-width':1.8}));
+    g.appendChild(el('ellipse',{cx:x-3.5,cy:y-5,rx:5.5,ry:3.8,fill:'rgba(255,255,255,0.22)'}));
+    g.appendChild(el('rect',{x:x-9,y:y-14,width:18,height:4,rx:2,fill:`url(#${gid})`,stroke:gk?'rgba(255,100,120,0.45)':gid==='pB'?'rgba(0,130,220,0.4)':'rgba(150,200,230,0.35)','stroke-width':.8,opacity:'.88'}));
+    const nt=el('text',{x,y:y+1,'text-anchor':'middle','dominant-baseline':'central','font-size':'11px',fill:tc,'font-weight':'700'});nt.textContent=num;g.appendChild(nt);
+  }
+  return g;
+}
+function defP(){return{bGK:{x:px(.55),y:py(10)},wGK:{x:px(24.45),y:py(10)},blue:[{num:2,x:px(3.5),y:py(2.2)},{num:3,x:px(3.5),y:py(6)},{num:4,x:px(3.5),y:py(10)},{num:5,x:px(3.5),y:py(14)},{num:6,x:px(3.5),y:py(17.8)},{num:7,x:px(8),y:py(10)}],white:[{num:2,x:px(21.5),y:py(2.2)},{num:3,x:px(21.5),y:py(6)},{num:4,x:px(21.5),y:py(10)},{num:5,x:px(21.5),y:py(14)},{num:6,x:px(21.5),y:py(17.8)},{num:7,x:px(17),y:py(10)}],ball:{x:px(12.5),y:py(10)}};}
+function mkPl(n){const d=defP();return{id:'p'+Date.now()+Math.random().toString(36).slice(2),name:n,bGK:{...d.bGK},wGK:{...d.wGK},blue:d.blue.map(p=>({...p})),white:d.white.map(p=>({...p})),ball:{...d.ball},arrows:[],kf:[]};}
+let plans=[mkPl('进攻战术 1')],pid=plans[0].id,mode='sel',drag=null,dln=null,playing=false,raf2=null;
 function plan(){return plans.find(p=>p.id===pid);}
-
-function svPt(e){const sv=document.getElementById('sv');const r=sv.getBoundingClientRect(),v=sv.viewBox.baseVal;const src=e.touches?e.touches[0]:e;return{x:(src.clientX-r.left)*(v.width/r.width),y:(src.clientY-r.top)*(v.height/r.height)};}
-
-function mkNode(x,y,num,fill,tc,gk){
-  const g=sve('g',{});
-  g.appendChild(sve('circle',{cx:x,cy:y,r:15,fill:'#000',opacity:'.25'}));
-  g.appendChild(sve('circle',{cx:x,cy:y,r:14,fill,stroke:gk?'#8a0818':'#051018','stroke-width':gk?2.5:2}));
-  g.appendChild(sve('rect',{x:x-8,y:y-13,width:16,height:4,rx:2,fill,stroke:gk?'#8a0818':'#051018','stroke-width':.8,opacity:'.9'}));
-  const t=sve('text',{x,y:y+1,'text-anchor':'middle','dominant-baseline':'central','font-size':'11px',fill:tc,'font-weight':'700'});t.textContent=num;g.appendChild(t);return g;
-}
-
-function bindDrag(node,obj){
-  function start(e){e.preventDefault();e.stopPropagation();const p=svPt(e);if(mode==='sel'){drag={obj,dx:p.x-obj.x,dy:p.y-obj.y};}else{dln={x1:obj.x,y1:obj.y,x2:obj.x,y2:obj.y};}}
-  node.addEventListener('pointerdown',start);node.addEventListener('touchstart',start,{passive:false});
-}
-
-function renderArrows(){const g=document.getElementById('gA');g.innerHTML='';plan().arrows.forEach(a=>{const r=a.t==='run';g.appendChild(sve('line',{x1:a.x1,y1:a.y1,x2:a.x2,y2:a.y2,stroke:r?'#00b8d4':'#ff8c40','stroke-width':2.6,'stroke-dasharray':r?'none':'8 5','marker-end':r?'url(#aR)':'url(#aP)'}));});if(dln){const r=mode==='run';g.appendChild(sve('line',{x1:dln.x1,y1:dln.y1,x2:dln.x2,y2:dln.y2,stroke:r?'#00b8d4':'#ff8c40','stroke-width':2.6,'stroke-dasharray':r?'none':'8 5',opacity:'.6'}));}}
-
-function renderPlayers(){
-  const g=document.getElementById('gP');g.innerHTML='';const p=plan();
-  p.blue.forEach(pl=>{const n=mkNode(pl.x,pl.y,pl.num,'#1a6dc8','#ddeeff',false);n.style.cursor='grab';bindDrag(n,pl);g.appendChild(n);});
-  p.white.forEach(pl=>{const n=mkNode(pl.x,pl.y,pl.num,'#d4e8f4','#0f2030',false);n.style.cursor='grab';bindDrag(n,pl);g.appendChild(n);});
-  const bgk=mkNode(p.bGK.x,p.bGK.y,1,'#c82030','#fff2f2',true);bgk.style.cursor='grab';bindDrag(bgk,p.bGK);g.appendChild(bgk);
-  const wgk=mkNode(p.wGK.x,p.wGK.y,1,'#c82030','#fff2f2',true);wgk.style.cursor='grab';bindDrag(wgk,p.wGK);g.appendChild(wgk);
-  const ball=sve('circle',{cx:p.ball.x,cy:p.ball.y,r:8,fill:'#e8c018',stroke:'#7a6008','stroke-width':1.5});ball.style.cursor='grab';
-  function bs(e){e.preventDefault();const q=svPt(e);if(mode==='sel')drag={obj:p.ball,dx:q.x-p.ball.x,dy:q.y-p.ball.y};}
-  ball.addEventListener('pointerdown',bs);ball.addEventListener('touchstart',bs,{passive:false});g.appendChild(ball);
-}
-
-const sv=document.getElementById('sv');
-function move(e){const p=svPt(e);if(drag){drag.obj.x=Math.max(FX+8,Math.min(FX+FW-8,p.x-drag.dx));drag.obj.y=Math.max(FY+8,Math.min(FY+FH-8,p.y-drag.dy));renderPlayers();renderArrows();}else if(dln){dln.x2=p.x;dln.y2=p.y;renderArrows();}}
-function up(){if(drag){drag=null;}if(dln){if(Math.hypot(dln.x2-dln.x1,dln.y2-dln.y1)>16)plan().arrows.push({t:mode==='run'?'run':'pas',x1:dln.x1,y1:dln.y1,x2:dln.x2,y2:dln.y2});dln=null;renderArrows();}}
-sv.addEventListener('pointermove',move);sv.addEventListener('pointerup',up);sv.addEventListener('pointerleave',()=>{drag=null;if(dln){dln=null;renderArrows();}});
-sv.addEventListener('touchmove',e=>{e.preventDefault();move(e);},{passive:false});sv.addEventListener('touchend',up);
-
-function M(m){mode=m;['bSel','bRun','bPas'].forEach(id=>document.getElementById(id).classList.remove('on'));({'sel':'bSel','run':'bRun','pas':'bPas'})[m]&&document.getElementById(({'sel':'bSel','run':'bRun','pas':'bPas'})[m]).classList.add('on');}
-function Undo(){plan().arrows.pop();renderArrows();}
-function ClrArr(){plan().arrows=[];renderArrows();}
-function Reset(){const d=defPos();const p=plan();Object.assign(p,{bGK:{...d.bGK},wGK:{...d.wGK},blue:d.blue.map(q=>({...q})),white:d.white.map(q=>({...q})),ball:{...d.ball}});renderPlayers();renderArrows();}
-function TglLines(){showLines=!showLines;document.getElementById('bLn').textContent=showLines?'≡ 隐藏标线':'≡ 显示标线';renderField();}
+function svP(ev){const sv=document.getElementById('sv');const r=sv.getBoundingClientRect(),v=sv.viewBox.baseVal;const s=ev.touches?ev.touches[0]:ev;return{x:(s.clientX-r.left)*(v.width/r.width),y:(s.clientY-r.top)*(v.height/r.height)};}
+function bindD(node,obj){function st(ev){ev.preventDefault();ev.stopPropagation();const p=svP(ev);if(mode==='sel'){drag={obj,dx:p.x-obj.x,dy:p.y-obj.y};}else{dln={x1:obj.x,y1:obj.y,x2:obj.x,y2:obj.y};}}node.addEventListener('pointerdown',st);node.addEventListener('touchstart',st,{passive:false});}
+function rArrows(){const g=document.getElementById('gA');g.innerHTML='';plan().arrows.forEach(a=>{const r=a.t==='run';g.appendChild(el('line',{x1:a.x1,y1:a.y1,x2:a.x2,y2:a.y2,stroke:r?'rgba(0,200,255,0.18)':'rgba(255,40,120,0.18)','stroke-width':6}));g.appendChild(el('line',{x1:a.x1,y1:a.y1,x2:a.x2,y2:a.y2,stroke:r?'#00ddff':'#ff4488','stroke-width':2.2,'stroke-dasharray':r?'none':'8 5','marker-end':r?'url(#aR)':'url(#aP)'}));});if(dln){const r=mode==='run';g.appendChild(el('line',{x1:dln.x1,y1:dln.y1,x2:dln.x2,y2:dln.y2,stroke:r?'#00ddff':'#ff4488','stroke-width':2.2,'stroke-dasharray':r?'none':'8 5',opacity:'.5'}));}}
+function rPlayers(){const g=document.getElementById('gP');g.innerHTML='';const p=plan();p.blue.forEach(pl=>{const n=mkN(pl.x,pl.y,pl.num,'pB','#c0e4ff',false,'blue_'+pl.num);n.style.cursor='grab';bindD(n,pl);g.appendChild(n);});p.white.forEach(pl=>{const n=mkN(pl.x,pl.y,pl.num,'pW','#0a2030',false,'white_'+pl.num);n.style.cursor='grab';bindD(n,pl);g.appendChild(n);});const bk=mkN(p.bGK.x,p.bGK.y,1,'pG','#fff0f2',true,'blue_1');bk.style.cursor='grab';bindD(bk,p.bGK);g.appendChild(bk);const wk=mkN(p.wGK.x,p.wGK.y,1,'pG','#fff0f2',true,'white_1');wk.style.cursor='grab';bindD(wk,p.wGK);g.appendChild(wk);const bx=p.ball.x,by=p.ball.y;g.appendChild(el('circle',{cx:bx+1,cy:by+2,r:9,fill:'rgba(0,0,0,0.3)'}));g.appendChild(el('circle',{cx:bx,cy:by,r:9,fill:'url(#blg)',stroke:'rgba(200,160,0,0.45)','stroke-width':1}));g.appendChild(el('ellipse',{cx:bx-2.5,cy:by-4,rx:4,ry:2.8,fill:'rgba(255,255,255,0.32)'}));const bl=el('circle',{cx:bx,cy:by,r:9,fill:'transparent'});bl.style.cursor='grab';function bs(ev){ev.preventDefault();const q=svP(ev);if(mode==='sel')drag={obj:p.ball,dx:q.x-p.ball.x,dy:q.y-p.ball.y};}bl.addEventListener('pointerdown',bs);bl.addEventListener('touchstart',bs,{passive:false});g.appendChild(bl);}
+const sv2=document.getElementById('sv');
+function mv(ev){const p=svP(ev);if(drag){drag.obj.x=Math.max(FX+8,Math.min(FX+FW-8,p.x-drag.dx));drag.obj.y=Math.max(FY+8,Math.min(FY+FH-8,p.y-drag.dy));rPlayers();rArrows();}else if(dln){dln.x2=p.x;dln.y2=p.y;rArrows();}}
+function up(){if(drag){drag=null;}if(dln){if(Math.hypot(dln.x2-dln.x1,dln.y2-dln.y1)>16)plan().arrows.push({t:mode==='run'?'run':'pas',x1:dln.x1,y1:dln.y1,x2:dln.x2,y2:dln.y2});dln=null;rArrows();}}
+sv2.addEventListener('pointermove',mv);sv2.addEventListener('pointerup',up);sv2.addEventListener('pointerleave',()=>{drag=null;if(dln){dln=null;rArrows();}});
+sv2.addEventListener('touchmove',ev=>{ev.preventDefault();mv(ev);},{passive:false});sv2.addEventListener('touchend',up);
+function getSpd(){return isFS?parseFloat(document.getElementById('fsspd').value):parseFloat(document.getElementById('spd').value);}
+function M(m){mode=m;syncCtrl();}
+function Undo(){plan().arrows.pop();rArrows();}
+function ClrArr(){plan().arrows=[];rArrows();}
+function Reset(){const d=defP();const p=plan();Object.assign(p,{bGK:{...d.bGK},wGK:{...d.wGK},blue:d.blue.map(q=>({...q})),white:d.white.map(q=>({...q})),ball:{...d.ball}});rPlayers();rArrows();}
+function TglLines(){showL=!showL;syncCtrl();rField();}
 window.M=M;window.Undo=Undo;window.ClrArr=ClrArr;window.Reset=Reset;window.TglLines=TglLines;
-
-function snap2(){const p=plan();return{blue:p.blue.map(q=>({...q})),white:p.white.map(q=>({...q})),bGK:{...p.bGK},wGK:{...p.wGK},ball:{...p.ball}};}
-function applyLerp(s0,s1,t){const p=plan();const L=(a,b)=>a+(b-a)*t;p.blue.forEach((q,i)=>{q.x=L(s0.blue[i].x,s1.blue[i].x);q.y=L(s0.blue[i].y,s1.blue[i].y);});p.white.forEach((q,i)=>{q.x=L(s0.white[i].x,s1.white[i].x);q.y=L(s0.white[i].y,s1.white[i].y);});p.bGK.x=L(s0.bGK.x,s1.bGK.x);p.bGK.y=L(s0.bGK.y,s1.bGK.y);p.wGK.x=L(s0.wGK.x,s1.wGK.x);p.wGK.y=L(s0.wGK.y,s1.wGK.y);p.ball.x=L(s0.ball.x,s1.ball.x);p.ball.y=L(s0.ball.y,s1.ball.y);}
-function updKF(){document.getElementById('kfLbl').textContent=plan().kf.length+' 阶段';}
-function RecKF(){plan().kf.push(snap2());updKF();}
+function sn(){const p=plan();return{blue:p.blue.map(q=>({...q})),white:p.white.map(q=>({...q})),bGK:{...p.bGK},wGK:{...p.wGK},ball:{...p.ball}};}
+function aLerp(s0,s1,t){const p=plan();const L=(a,b)=>a+(b-a)*t;p.blue.forEach((q,i)=>{q.x=L(s0.blue[i].x,s1.blue[i].x);q.y=L(s0.blue[i].y,s1.blue[i].y);});p.white.forEach((q,i)=>{q.x=L(s0.white[i].x,s1.white[i].x);q.y=L(s0.white[i].y,s1.white[i].y);});p.bGK.x=L(s0.bGK.x,s1.bGK.x);p.bGK.y=L(s0.bGK.y,s1.bGK.y);p.wGK.x=L(s0.wGK.x,s1.wGK.x);p.wGK.y=L(s0.wGK.y,s1.wGK.y);p.ball.x=L(s0.ball.x,s1.ball.x);p.ball.y=L(s0.ball.y,s1.ball.y);}
+function updKF(){const t=plan().kf.length+' 阶段';['kfLbl','fsKfLbl'].forEach(id=>{const b=document.getElementById(id);if(b)b.textContent=t;});}
+function RecKF(){plan().kf.push(sn());updKF();}
 function ClrKF(){plan().kf=[];updKF();}
 window.RecKF=RecKF;window.ClrKF=ClrKF;
-function PlayTgl(){const p=plan();if(p.kf.length<2)return;playing=!playing;document.getElementById('bPly').textContent=playing?'⏸ 暂停':'▶ 播放';if(playing)runAnim2();else if(raf2)cancelAnimationFrame(raf2);}
+function PlayTgl(){const p=plan();if(p.kf.length<2)return;playing=!playing;syncCtrl();if(playing)run2();else if(raf2)cancelAnimationFrame(raf2);}
 window.PlayTgl=PlayTgl;
-function runAnim2(){const p=plan();const spd=parseFloat(document.getElementById('spd').value)||1;const dur=1100/spd;let t0=null,seg=0;const segs=p.kf.length-1;function step(ts){if(!playing)return;if(!t0)t0=ts;const t=Math.min(1,(ts-t0)/dur);applyLerp(p.kf[seg],p.kf[seg+1],t);renderPlayers();renderArrows();if(t<1){raf2=requestAnimationFrame(step);}else{seg++;if(seg>=segs){playing=false;document.getElementById('bPly').textContent='▶ 播放';return;}t0=null;raf2=requestAnimationFrame(step);}}raf2=requestAnimationFrame(step);}
-
-function NewPlan(){const p=mkPlan('方案 '+(plans.length+1));plans.push(p);pid=p.id;renderAll();}
-function SelPlan(id){pid=id;renderAll();}
-function DelPlan(id,e){e.stopPropagation();if(plans.length<=1)return;plans=plans.filter(p=>p.id!==id);if(pid===id)pid=plans[0].id;renderAll();}
-function RenPlan(id,e){e.stopPropagation();const p=plans.find(q=>q.id===id);const n=prompt('方案名称',p.name);if(n){p.name=n;renderPlanList();}}
+function run2(){const p=plan();const spd=getSpd()||1;const dur=1100/spd;let t0=null,seg=0;const segs=p.kf.length-1;function step(ts){if(!playing)return;if(!t0)t0=ts;const t=Math.min(1,(ts-t0)/dur);aLerp(p.kf[seg],p.kf[seg+1],t);rPlayers();rArrows();if(t<1){raf2=requestAnimationFrame(step);}else{seg++;if(seg>=segs){playing=false;syncCtrl();return;}t0=null;raf2=requestAnimationFrame(step);}}raf2=requestAnimationFrame(step);}
+function NewPlan(){const p=mkPl('方案 '+(plans.length+1));plans.push(p);pid=p.id;rAll();}
+function SelPlan(id){pid=id;if(isFS)document.getElementById('fsPlanName').textContent=plan().name;rAll();}
+function DelPlan(id,ev){ev.stopPropagation();if(plans.length<=1)return;plans=plans.filter(p=>p.id!==id);if(pid===id)pid=plans[0].id;rAll();}
+function RenPlan(id,ev){ev.stopPropagation();const p=plans.find(q=>q.id===id);const n=prompt('方案名称',p.name);if(n){p.name=n;rPlanList();if(isFS)document.getElementById('fsPlanName').textContent=plan().name;}}
 window.NewPlan=NewPlan;window.SelPlan=SelPlan;window.DelPlan=DelPlan;window.RenPlan=RenPlan;
-
-function renderPlanList(){const list=document.getElementById('pList');list.innerHTML='';plans.forEach(p=>{const row=document.createElement('div');row.className='prow'+(p.id===pid?' on':'');row.onclick=()=>SelPlan(p.id);const nm=document.createElement('span');nm.className='pname';nm.textContent=p.name;const eb=document.createElement('button');eb.className='btn';eb.style.padding='2px 6px';eb.textContent='✏';eb.onclick=ev=>RenPlan(p.id,ev);const db=document.createElement('button');db.className='btn';db.style.padding='2px 6px';db.textContent='🗑';db.onclick=ev=>DelPlan(p.id,ev);row.appendChild(nm);row.appendChild(eb);row.appendChild(db);list.appendChild(row);});}
-function renderAll(){renderField();renderPlayers();renderArrows();renderPlanList();updKF();}
-M('sel');renderAll();
+function rPlanList(){const list=document.getElementById('pList');list.innerHTML='';plans.forEach(p=>{const row=document.createElement('div');row.className='prow2'+(p.id===pid?' on':'');row.onclick=()=>SelPlan(p.id);const nm=document.createElement('span');nm.className='pname';nm.textContent=p.name;const eb=document.createElement('button');eb.className='btn';eb.style.cssText='padding:2px 6px;font-size:11px';eb.textContent='✏';eb.onclick=ev=>RenPlan(p.id,ev);const db=document.createElement('button');db.className='btn danger';db.style.cssText='padding:2px 6px;font-size:11px';db.textContent='🗑';db.onclick=ev=>DelPlan(p.id,ev);row.appendChild(nm);row.appendChild(eb);row.appendChild(db);list.appendChild(row);});}
+function bldAV(){bldAVG('avB','blue',[1,2,3,4,5,6,7]);bldAVG('avW','white',[1,2,3,4,5,6,7]);}
+function bldAVG(cid,team,nums){const c=document.getElementById(cid);c.innerHTML='';nums.forEach(num=>{const key=team+'_'+num;const sl=document.createElement('div');sl.className='avslot';sl.onclick=()=>openM(key,team,num);const ring=document.createElement('div');ring.className='aving';ring.style.background=num===1?'linear-gradient(135deg,#380010,#800018)':team==='blue'?'linear-gradient(135deg,#0a1e50,#163880)':'linear-gradient(135deg,#102030,#1a3050)';ring.style.borderColor=num===1?'rgba(255,60,80,0.35)':team==='blue'?'rgba(0,120,255,0.25)':'rgba(100,160,210,0.25)';if(AV[key]){const img=document.createElement('img');img.src=AV[key];ring.appendChild(img);const del=document.createElement('div');del.className='avdel';del.textContent='×';del.onclick=ev=>{ev.stopPropagation();delete AV[key];bldAV();rPlayers();};ring.appendChild(del);}else{ring.textContent=num;ring.style.color=num===1?'rgba(255,120,140,0.75)':team==='blue'?'rgba(100,180,255,0.75)':'rgba(180,220,240,0.7)';}const lb=document.createElement('div');lb.className='avlbl';lb.textContent=num===1?'GK':'#'+num;sl.appendChild(ring);sl.appendChild(lb);c.appendChild(sl);});}
+function openM(key,team,num){pKey=key;pURL=null;document.getElementById('mttl').textContent=(team==='blue'?'Blue':'White')+' '+(num===1?'GK':'#'+num)+' — Avatar';document.getElementById('pvWrap').style.display='none';document.getElementById('upHint').style.display='block';document.getElementById('fInput').value='';document.getElementById('modalWrap').classList.add('show');}
+function closeM(){document.getElementById('modalWrap').classList.remove('show');pKey=null;pURL=null;}
+window.closeM=closeM;
+window.onFS2=function(ev){const f=ev.target.files[0];if(!f)return;const r=new FileReader();r.onload=e=>{pURL=e.target.result;document.getElementById('pvImg').src=pURL;document.getElementById('pvWrap').style.display='block';document.getElementById('upHint').style.display='none';};r.readAsDataURL(f);};
+window.confUp=function(){if(!pKey||!pURL)return;AV[pKey]=pURL;closeM();bldAV();rPlayers();};
+function rAll(){rField();rPlayers();rArrows();rPlanList();updKF();syncCtrl();}
+M('sel');bldAV();rAll();
 })();
 </script>
 </body>
